@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import '../constants/app_constants.dart';
 import '../models/event.dart';
+import '../services/time_service.dart';
+import '../utils/date_utils.dart' as CustomDateUtils;
 import 'countdown_timer.dart';
 
 class EventDetailsPopup extends StatefulWidget {
@@ -20,10 +22,10 @@ class _EventDetailsPopupState extends State<EventDetailsPopup> {
   @override
   void initState() {
     super.initState();
-    timeUntilNextEvent = widget.event.startTime.difference(DateTime.now());
+    timeUntilNextEvent = TimeService.getTimeUntilEvent(widget.event.startTime);
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() {
-        timeUntilNextEvent = widget.event.startTime.difference(DateTime.now());
+        timeUntilNextEvent = TimeService.getTimeUntilEvent(widget.event.startTime);
       });
     });
   }
@@ -34,35 +36,22 @@ class _EventDetailsPopupState extends State<EventDetailsPopup> {
     super.dispose();
   }
 
-  String _formatDateTime(DateTime dateTime) {
-    final dateFormat = DateFormat('dd.MM.yyyy');
-    final timeFormat = DateFormat('hh:mm a', 'si');
-    return 'දිනය : ${dateFormat.format(dateTime)}\nවේලාව: ${timeFormat.format(dateTime)}';
-  }
-
   @override
   Widget build(BuildContext context) {
-    // Get screen height
     final screenHeight = MediaQuery.of(context).size.height;
-
-    // Responsive sizes based on screen height
-    final double padding = screenHeight * 0.02; // 2% of screen height
-    final double titleFontSize = screenHeight * 0.035; // 3.5% of screen height
-    final double textFontSize = screenHeight * 0.025; // 2.5% of screen height
-    final double iconSize = screenHeight * 0.035; // 3.5% of screen height
-    final double spacing = screenHeight * 0.015; // 1.5% of screen height
+    final double padding = screenHeight * 0.02;
+    final double titleFontSize = screenHeight * 0.035;
+    final double textFontSize = screenHeight * 0.025;
+    final double iconSize = screenHeight * 0.035;
+    final double spacing = screenHeight * 0.015;
 
     return Dialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(padding * 0.625), // 62.5% of padding
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(padding * 0.625)),
       child: Container(
-        constraints: BoxConstraints(
-          maxHeight: screenHeight * 0.8, // Max height 80% of screen
-        ),
-        padding: EdgeInsets.all(padding), // Padding scales with height
+        constraints: BoxConstraints(maxHeight: screenHeight * 0.8),
+        padding: EdgeInsets.all(padding),
         decoration: BoxDecoration(
-          color: const Color(0xFFEFEFEF),
+          color: AppConstants.backgroundColor,
           borderRadius: BorderRadius.circular(padding * 0.625),
         ),
         child: Stack(
@@ -70,69 +59,52 @@ class _EventDetailsPopupState extends State<EventDetailsPopup> {
             SingleChildScrollView(
               child: LayoutBuilder(
                 builder: (context, constraints) {
-                  // Use available width minus padding for the image box
-                  final availableWidth = constraints.maxWidth - (padding * 2); // Padding on both sides
+                  final availableWidth = constraints.maxWidth - (padding * 2);
                   return Column(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      // Space for the close button at the top-right
-                      SizedBox(height: iconSize.clamp(18, 30) + spacing), // Height of icon + spacing
-                      // Event Image in a Square Box (1:1)
+                      SizedBox(height: iconSize.clamp(18, 30) + spacing),
                       Container(
-                        padding: EdgeInsets.all(padding * 0.5), // Half padding for image box
+                        padding: EdgeInsets.all(padding * 0.5),
                         decoration: BoxDecoration(
-                          color: const Color(0xFFFFE3AE),
+                          color: AppConstants.accentColor,
                           borderRadius: BorderRadius.circular(padding * 0.625),
                         ),
                         child: ConstrainedBox(
-                          constraints: BoxConstraints(
-                            maxWidth: availableWidth,
-                            maxHeight: availableWidth, // 1:1 ratio (square)
-                          ),
-                          child: Image.asset(
-                            widget.event.imagePath,
-                            width: availableWidth,
-                            height: availableWidth,
-                            fit: BoxFit.contain,
-                          ),
+                          constraints: BoxConstraints(maxWidth: availableWidth, maxHeight: availableWidth),
+                          child: Image.asset(widget.event.imagePath, width: availableWidth, height: availableWidth, fit: BoxFit.contain),
                         ),
                       ),
-                      SizedBox(height: spacing), // Spacing scales with height
-                      // Event Title (Centered)
+                      SizedBox(height: spacing),
                       Text(
                         widget.event.name,
                         style: TextStyle(
-                          fontSize: titleFontSize.clamp(20, 28), // Min 20, Max 28
-                          color: const Color(0xFF191919),
-                          fontFamily: 'UNArundathee',
+                          fontSize: titleFontSize.clamp(20, 28),
+                          color: AppConstants.textColor,
+                          fontFamily: AppConstants.fontSecondary,
                         ),
                         textAlign: TextAlign.center,
                       ),
                       SizedBox(height: spacing),
-                      // Date and Time
                       Text(
-                        _formatDateTime(widget.event.startTime),
+                        CustomDateUtils.DateUtils.formatDateTime(widget.event.startTime, AppConstants.localeSinhala),
                         style: TextStyle(
-                          fontSize: textFontSize.clamp(16, 24), // Min 16, Max 24
-                          color: const Color(0xFF191919),
-                          fontFamily: 'UNGurulugomi',
+                          fontSize: textFontSize.clamp(16, 24),
+                          color: AppConstants.textColor,
+                          fontFamily: AppConstants.fontPrimary,
                         ),
                         textAlign: TextAlign.center,
                       ),
                       SizedBox(height: spacing),
-                      // Countdown Timer for Selected Event
-                      CountdownTimer(
-                        timeUntilNextEvent: timeUntilNextEvent,
-                      ),
+                      CountdownTimer(timeUntilNextEvent: timeUntilNextEvent),
                       SizedBox(height: spacing),
-                      // Description
                       Text(
                         widget.event.description,
                         style: TextStyle(
-                          fontSize: textFontSize.clamp(16, 24), // Min 16, Max 24
-                          color: const Color(0xFF191919),
-                          fontFamily: 'UNGurulugomi',
+                          fontSize: textFontSize.clamp(16, 24),
+                          color: AppConstants.textColor,
+                          fontFamily: AppConstants.fontPrimary,
                         ),
                         textAlign: TextAlign.center,
                       ),
@@ -141,22 +113,21 @@ class _EventDetailsPopupState extends State<EventDetailsPopup> {
                 },
               ),
             ),
-            // Fixed Close Button at Top Right (Before Image)
             Positioned(
-              right: 0, // No padding from right edge
-              top: 0, // No padding from top edge
+              right: 0,
+              top: 0,
               child: Container(
-                width: iconSize.clamp(18, 30), // Match icon size
-                height: iconSize.clamp(18, 30), // Match icon size
+                width: iconSize.clamp(18, 30),
+                height: iconSize.clamp(18, 30),
                 decoration: const BoxDecoration(
-                  color: Color(0xFFFFCD71), // Background color for close icon
+                  color: AppConstants.secondaryColor,
                   shape: BoxShape.circle,
                 ),
                 child: IconButton(
-                  icon: const Icon(Icons.close, color: Color(0xFF191919)),
-                  iconSize: iconSize.clamp(18, 30), // Min 18, Max 30
-                  padding: EdgeInsets.zero, // No padding to match icon size
-                  constraints: const BoxConstraints(), // Remove default constraints
+                  icon: const Icon(Icons.close, color: AppConstants.textColor),
+                  iconSize: iconSize.clamp(18, 30),
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
                   onPressed: () => Navigator.of(context).pop(),
                 ),
               ),
