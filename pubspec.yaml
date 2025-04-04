@@ -91,6 +91,7 @@ flutter:
 
   assets:
     - assets/sun.png
+    - assets/images/sun.png
     - assets/images/new_year.png
     - assets/images/festival.png
     - assets/images/auspicious.png

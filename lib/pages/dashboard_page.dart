@@ -20,12 +20,23 @@ class _DashboardPageState extends State<DashboardPage> {
   Event? selectedEvent;
   Timer? timer;
   Duration timeUntilNextEvent = Duration.zero;
+  final ScrollController _scrollController = ScrollController();
+  bool _hasScrolledToNextEvent = false;
 
   @override
   void initState() {
     super.initState();
     events = EventData.events;
     selectNearestEvent();
+
+    // Scroll to the next event only on first build
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!_hasScrolledToNextEvent && _scrollController.hasClients) {
+        scrollToNextEvent();
+        _hasScrolledToNextEvent = true;
+      }
+    });
+
     timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() {
         if (nextEvent != null) {
@@ -39,6 +50,7 @@ class _DashboardPageState extends State<DashboardPage> {
   @override
   void dispose() {
     timer?.cancel();
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -53,6 +65,24 @@ class _DashboardPageState extends State<DashboardPage> {
         timeUntilNextEvent = nextEvent!.startTime.difference(DateTime.now());
         selectedEvent ??= nextEvent;
       });
+    }
+  }
+
+  void scrollToNextEvent() {
+    if (nextEvent != null && _scrollController.hasClients) {
+      final nextEventIndex = events.indexOf(nextEvent!);
+      if (nextEventIndex >= 0) {
+        // Estimate EventCard height based on its design
+        final cardHeight = screenHeight * 0.18; // Adjusted to match EventCard height
+        final offset = nextEventIndex * cardHeight;
+
+        // Ensure the offset aligns the top of the card with the top of the ListView
+        _scrollController.animateTo(
+          offset,
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.easeInOut,
+        );
+      }
     }
   }
 
@@ -71,18 +101,18 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 
+  late double screenHeight;
+
   @override
   Widget build(BuildContext context) {
-    // Get screen height
-    final screenHeight = MediaQuery.of(context).size.height;
+    screenHeight = MediaQuery.of(context).size.height;
 
-    // Responsive sizes based on screen height
-    final double padding = screenHeight * 0.02; // 2% of screen height
-    final double headerFontSize = screenHeight * 0.04; // 4% of screen height
-    final double subHeaderFontSize = screenHeight * 0.03; // 3% of screen height
-    final double textFontSize = screenHeight * 0.025; // 2.5% of screen height
-    final double iconSize = screenHeight * 0.035; // 3.5% of screen height
-    final double spacing = screenHeight * 0.015; // 1.5% of screen height
+    final double padding = screenHeight * 0.02;
+    final double headerFontSize = screenHeight * 0.04;
+    final double subHeaderFontSize = screenHeight * 0.03;
+    final double textFontSize = screenHeight * 0.025;
+    final double iconSize = screenHeight * 0.035;
+    final double spacing = screenHeight * 0.015;
 
     return Scaffold(
       backgroundColor: const Color(0xFFF5C15C),
@@ -90,31 +120,23 @@ class _DashboardPageState extends State<DashboardPage> {
         child: Column(
           children: [
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: padding, vertical: padding * 0.625), // Vertical padding is 62.5% of horizontal
+              padding: EdgeInsets.symmetric(horizontal: padding, vertical: padding * 0.625),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  Image.asset(
+                    'assets/images/sun.png',
+                    height: iconSize.clamp(20, 36),
+                    width: iconSize.clamp(20, 36),
+                  ),
+                  SizedBox(width: spacing * 0.5),
                   Text(
                     'සුභ අළුත් අවුරුද්දක් වේවා!',
                     style: TextStyle(
-                      fontSize: headerFontSize.clamp(24, 40), // Min 24, Max 40
+                      fontSize: headerFontSize.clamp(24, 40),
                       color: const Color(0xFF191919),
                       fontFamily: 'UNDisapamok',
                     ),
-                  ),
-                  Row(
-                    children: [
-                      IconButton(
-                        icon: Icon(Icons.translate, color: const Color(0xFF191919)),
-                        iconSize: iconSize.clamp(20, 36), // Min 20, Max 36
-                        onPressed: () {},
-                      ),
-                      IconButton(
-                        icon: Icon(Icons.notifications, color: const Color(0xFF191919)),
-                        iconSize: iconSize.clamp(20, 36), // Min 20, Max 36
-                        onPressed: () {},
-                      ),
-                    ],
                   ),
                 ],
               ),
@@ -137,7 +159,7 @@ class _DashboardPageState extends State<DashboardPage> {
                           Text(
                             'මීළග නැකත : ${nextEvent?.name ?? ''}',
                             style: TextStyle(
-                              fontSize: textFontSize.clamp(16, 24), // Min 16, Max 24
+                              fontSize: textFontSize.clamp(16, 24),
                               color: const Color(0xFF191919),
                               fontFamily: 'UNArundathee',
                             ),
@@ -146,7 +168,7 @@ class _DashboardPageState extends State<DashboardPage> {
                           Text(
                             nextEvent != null ? _formatDateTime(nextEvent!.startTime) : '',
                             style: TextStyle(
-                              fontSize: textFontSize.clamp(16, 24), // Min 16, Max 24
+                              fontSize: textFontSize.clamp(16, 24),
                               color: const Color(0xFF191919),
                               fontFamily: 'UNGurulugomi',
                             ),
@@ -157,7 +179,7 @@ class _DashboardPageState extends State<DashboardPage> {
                           Text(
                             nextEvent?.description ?? '',
                             style: TextStyle(
-                              fontSize: textFontSize.clamp(16, 24), // Min 16, Max 24
+                              fontSize: textFontSize.clamp(16, 24),
                               color: const Color(0xFF191919),
                               fontFamily: 'UNGurulugomi',
                             ),
@@ -165,20 +187,40 @@ class _DashboardPageState extends State<DashboardPage> {
                         ],
                       ),
                     ),
-                    SizedBox(height: spacing * 1.33), // 1.33x spacing
+                    SizedBox(height: spacing * 1.33),
                     Expanded(
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Text(
-                            'නැකත් ලැයිස්තුව',
-                            style: TextStyle(
-                              fontSize: headerFontSize.clamp(24, 40), // Min 20, Max 32
-                              color: const Color(0xFF191919),
-                              fontFamily: 'UNDisapamok',
-                            ),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Container(
+                                  height: 1,
+                                  color: const Color(0xFF191919),
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: padding * 0.5),
+                                child: Text(
+                                  'නැකත් ලැයිස්තුව',
+                                  style: TextStyle(
+                                    fontSize: headerFontSize.clamp(24, 40),
+                                    color: const Color(0xFF191919),
+                                    fontFamily: 'UNDisapamok',
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                              Expanded(
+                                child: Container(
+                                  height: 1,
+                                  color: const Color(0xFF191919),
+                                ),
+                              ),
+                            ],
                           ),
-                          SizedBox(height: spacing * 0.67), // 0.67x spacing
+                          SizedBox(height: spacing * 0.67),
                           Expanded(
                             child: Container(
                               padding: EdgeInsets.all(padding),
@@ -186,21 +228,27 @@ class _DashboardPageState extends State<DashboardPage> {
                                 color: const Color(0xFFEFEFEF),
                                 borderRadius: BorderRadius.circular(padding * 0.625),
                               ),
-                              child: ListView.builder(
-                                itemCount: events.length,
-                                itemBuilder: (context, index) {
-                                  final event = events[index];
-                                  return EventCard(
-                                    event: event,
-                                    isSelected: event == selectedEvent,
-                                    onTap: () {
-                                      setState(() {
-                                        selectedEvent = event;
-                                      });
-                                      _showEventDetails(context, event);
-                                    },
-                                  );
-                                },
+                              child: Scrollbar(
+                                controller: _scrollController,
+                                thumbVisibility: true,
+                                radius: Radius.circular(padding * 0.5),
+                                child: ListView.builder(
+                                  controller: _scrollController,
+                                  itemCount: events.length,
+                                  itemBuilder: (context, index) {
+                                    final event = events[index];
+                                    return EventCard(
+                                      event: event,
+                                      isSelected: event == selectedEvent,
+                                      onTap: () {
+                                        setState(() {
+                                          selectedEvent = event;
+                                        });
+                                        _showEventDetails(context, event);
+                                      },
+                                    );
+                                  },
+                                ),
                               ),
                             ),
                           ),

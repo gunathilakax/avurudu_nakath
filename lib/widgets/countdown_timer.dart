@@ -15,15 +15,42 @@ class CountdownTimer extends StatelessWidget {
     final double textFontSize = screenHeight * 0.025; // 2.5% of screen height
     final double containerWidth = screenHeight * 0.05; // 5% of screen height for width reference
 
+    // Check if the event has ended (timeUntilNextEvent <= 0)
+    final bool hasEnded = timeUntilNextEvent.inSeconds <= 0;
+
     return SizedBox(
       width: MediaQuery.of(context).size.width - (padding * 2), // Adjust width dynamically
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          _buildTimeUnit(context, 'දින: ', timeUntilNextEvent.inDays, textFontSize, padding),
-          _buildTimeUnit(context, 'පැය: ', timeUntilNextEvent.inHours % 24, textFontSize, padding),
-          _buildTimeUnit(context, 'මිනි: ', timeUntilNextEvent.inMinutes % 60, textFontSize, padding),
-          _buildTimeUnit(context, 'තත්: ', timeUntilNextEvent.inSeconds % 60, textFontSize, padding),
+          _buildTimeUnit(
+            context,
+            'දින: ',
+            hasEnded ? 0 : timeUntilNextEvent.inDays,
+            textFontSize,
+            padding,
+          ),
+          _buildTimeUnit(
+            context,
+            'පැය: ',
+            hasEnded ? 0 : timeUntilNextEvent.inHours % 24,
+            textFontSize,
+            padding,
+          ),
+          _buildTimeUnit(
+            context,
+            'මිනි: ',
+            hasEnded ? 0 : timeUntilNextEvent.inMinutes % 60,
+            textFontSize,
+            padding,
+          ),
+          _buildTimeUnit(
+            context,
+            'තත්: ',
+            hasEnded ? 0 : timeUntilNextEvent.inSeconds % 60,
+            textFontSize,
+            padding,
+          ),
         ],
       ),
     );
