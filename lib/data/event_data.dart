@@ -7,14 +7,14 @@ class EventData {
       description:
           'අභිනව චන්ද්‍ර වර්ෂය සඳහා මාර්තු මස 30 වැනි ඉරිදා දින නව සඳ බැලීම මැනවි.',
       startTime: DateTime(2025, 03, 30, 19, 00),
-      imagePath: 'assets/images/auspicious.png',
+      imagePath: 'assets/images/watching_moon.png',
     ),
     Event(
       name: 'පරණ අවුරුද්ද සඳහා ස්නානය',
       description:
           'අප්‍රේල් මස 13 වැනි ඉරිදා දින දිවුල්පත් යුෂ මිශ්‍ර නානු ගා ස්නානය කොට ඉෂ්ට දේවතා අනුස්මරණයෙහි යෙදී වාසය මැනවි.',
       startTime: DateTime(2025, 04, 13, 08, 00),
-      imagePath: 'assets/images/festival.png',
+      imagePath: 'assets/images/bathing.png',
     ),
     Event(
       name: 'අලුත් අවුරුදු උදාව',
@@ -28,42 +28,42 @@ class EventData {
       description:
           'අප්‍රේල් මස 13 වැනි ඉරිදා අපරභාග 08.57 සිට පසුදින එනම් 14 වැනි සඳුදා පූර්වභාග 09.45 දක්වා පුණ්‍ය කාලය බැවින් අපේල් මස් 13 ඉරිදා අපරභාග 08.57 ට පළමුව ආහාර පාන ගෙන සියලු වැඩ අත්හැර ආගමික වතාවත්වල යෙදීම ද, පුණ්‍ය කාලයේ අපරභාග කොටස එනම් අප්‍රේල් මස 14 වැනි සඳුදා පූර්වභාග 03.21 සිට 14 වැනි සඳුදා පූර්වභාග 09.45 දක්වා පහත දැක්වෙන අයුරින් ආහාර පිසීම,වැඩ ඇල්ලීම,ගනුදෙනු කිරීම හා ආහාර අනුභවය ආදී නැකත් චාරිත්‍ර විධි ඉටු කිරීම මැනවි.',
       startTime: DateTime(2025, 04, 13, 20, 57),
-      imagePath: 'assets/images/milk_overflow.png',
+      imagePath: 'assets/images/nonagathaya.png',
     ),
     Event(
       name: 'ආහර පිසීම',
       description:
           'අප්‍රේල් මස 14 වැනි සඳුදා පූර්වභාග 04.04 ට තඹ වර්ණ වස්ත්‍රාභරණයෙන් සැරසී දකුණු දිශාව බලා ළිප් බැඳ ගිනි මොළවා කිරිබතක්ද කැවිලි වර්ගයක්ද දී කිරි සහ විලඳ ද පිළියෙල කර ගැනීම මැනවි.',
       startTime: DateTime(2025, 04, 14, 04, 04),
-      imagePath: 'assets/images/gifts.png',
+      imagePath: 'assets/images/cooking.png',
     ),
     Event(
       name: 'වැඩ ඇල්ලීම, ගනුදෙනු කිරීම හා ආහාර අනුභවය',
       description:
           'අප්‍රේල් මස 14 වැනි සඳුදා පූර්වභාග 06.44 ට මුතු හා ශ්වේත වර්ණ වස්ත්‍රාභරණයෙන් සැරසී දකුණු දිශාව බලා සියලු වැඩ අල්ලා ගනුදෙනු කොට ආහාර අනුභව කිරීම මැනවි.',
       startTime: DateTime(2025, 04, 14, 06, 44),
-      imagePath: 'assets/images/new_year.png',
+      imagePath: 'assets/images/working.png',
     ),
     Event(
       name: 'හිසතෙල් ගෑම',
       description:
           'අප්‍රේල් මස 16 වැනි බදාදා පූර්වභාග 09.04 ට පච්ච හෙවත් කොල පැහැති වස්ත්‍රාභරණයෙන් සැරසී උතුරු දිශාව බලා හිසට කොහොඹ පත් ද පයට කොළොන් පත් ද තබා කොහොඹ පත් යුෂ මිශ්‍ර නානු හා තෙල් ගා ස්නානය කිරීම මැනවි.',
       startTime: DateTime(2025, 04, 16, 09, 04),
-      imagePath: 'assets/images/new_year.png',
+      imagePath: 'assets/images/oiling.png',
     ),
     Event(
       name: 'රැකීරක්ෂා සඳහා පිටත්ව යෑම',
       description:
           'අප්‍රේල් මස 17 වැනි බ්‍රහස්පතින්දා පූර්වභාග 09.03 ට රන්වන් පැහැති වස්ත්‍රාභරණයෙන් සැරසී කිරිබතක් හා එළකිරි මිශ්‍ර කැවිලි වර්ගයක් අනුභව කර උතුරු දිශාව බලා පිටත්ව යෑම මැනවි.',
       startTime: DateTime(2025, 04, 17, 09, 03),
-      imagePath: 'assets/images/new_year.png',
+      imagePath: 'assets/images/job.png',
     ),
     Event(
       name: 'අභිනව සූර්ය වර්ෂය සඳහා නව සඳ බැලීම',
       description:
           'අභිනව සූර්ය වර්ෂය සඳහා මැයි මස 01 වැනි බ්‍රහස්පතින්දා දින නව සඳ බැලීම මැනවි.',
       startTime: DateTime(2025, 05, 01, 19, 00),
-      imagePath: 'assets/images/new_year.png',
+      imagePath: 'assets/images/watching_moon.png',
     ),
   ];
 }

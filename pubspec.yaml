@@ -90,13 +90,15 @@ flutter:
   # see https://flutter.dev/to/font-from-package
 
   assets:
-    - assets/sun.png
     - assets/images/sun.png
+    - assets/images/watching_moon.png
+    - assets/images/bathing.png
+    - assets/images/nonagathaya.png
     - assets/images/new_year.png
-    - assets/images/festival.png
-    - assets/images/auspicious.png
-    - assets/images/milk_overflow.png
-    - assets/images/gifts.png
+    - assets/images/cooking.png
+    - assets/images/working.png
+    - assets/images/oiling.png
+    - assets/images/job.png
 
   fonts:
     - family: UNDisapamok

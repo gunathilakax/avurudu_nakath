@@ -41,7 +41,9 @@ class _DashboardPageState extends State<DashboardPage> {
     timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() {
         if (nextEvent != null) {
-          timeUntilNextEvent = TimeService.getTimeUntilEvent(nextEvent!.startTime);
+          timeUntilNextEvent = TimeService.getTimeUntilEvent(
+            nextEvent!.startTime,
+          );
           _selectNearestEvent();
         }
       });
@@ -63,7 +65,9 @@ class _DashboardPageState extends State<DashboardPage> {
           (event) => event.startTime.isAfter(DateTime.now()),
           orElse: () => events.first,
         );
-        timeUntilNextEvent = TimeService.getTimeUntilEvent(nextEvent!.startTime);
+        timeUntilNextEvent = TimeService.getTimeUntilEvent(
+          nextEvent!.startTime,
+        );
         selectedEvent ??= nextEvent;
       });
     }
@@ -86,7 +90,10 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   void _showEventDetails(BuildContext context, Event event) {
-    showDialog(context: context, builder: (_) => EventDetailsPopup(event: event));
+    showDialog(
+      context: context,
+      builder: (_) => EventDetailsPopup(event: event),
+    );
   }
 
   @override
@@ -103,7 +110,10 @@ class _DashboardPageState extends State<DashboardPage> {
         child: Column(
           children: [
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: padding, vertical: padding * 0.625),
+              padding: EdgeInsets.symmetric(
+                horizontal: padding,
+                vertical: padding * 0.625,
+              ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -111,7 +121,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     AppConstants.greeting,
                     style: TextStyle(
                       fontSize: headerFontSize.clamp(24, 40),
-                      color: AppConstants.textColor,
+                      color: AppConstants.accentColor,
                       fontFamily: AppConstants.fontPrimary,
                     ),
                   ),
@@ -144,7 +154,10 @@ class _DashboardPageState extends State<DashboardPage> {
                           SizedBox(height: spacing),
                           Text(
                             nextEvent != null
-                                ? CustomDateUtils.DateUtils.formatDateTime(nextEvent!.startTime, AppConstants.localeSinhala)
+                                ? CustomDateUtils.DateUtils.formatDateTime(
+                                  nextEvent!.startTime,
+                                  AppConstants.localeSinhala,
+                                )
                                 : '',
                             style: TextStyle(
                               fontSize: textFontSize.clamp(16, 24),
@@ -153,7 +166,9 @@ class _DashboardPageState extends State<DashboardPage> {
                             ),
                           ),
                           SizedBox(height: spacing),
-                          CountdownTimer(timeUntilNextEvent: timeUntilNextEvent),
+                          CountdownTimer(
+                            timeUntilNextEvent: timeUntilNextEvent,
+                          ),
                           SizedBox(height: spacing),
                           Text(
                             nextEvent?.description ?? '',
@@ -173,20 +188,32 @@ class _DashboardPageState extends State<DashboardPage> {
                         children: [
                           Row(
                             children: [
-                              Expanded(child: Container(height: 1, color: AppConstants.textColor)),
+                              Expanded(
+                                child: Container(
+                                  height: 1,
+                                  color: AppConstants.accentColor,
+                                ),
+                              ),
                               Padding(
-                                padding: EdgeInsets.symmetric(horizontal: padding * 0.5),
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: padding * 0.5,
+                                ),
                                 child: Text(
                                   AppConstants.eventListLabel,
                                   style: TextStyle(
                                     fontSize: headerFontSize.clamp(24, 40),
-                                    color: AppConstants.textColor,
+                                    color: AppConstants.accentColor,
                                     fontFamily: AppConstants.fontPrimary,
                                   ),
                                   textAlign: TextAlign.center,
                                 ),
                               ),
-                              Expanded(child: Container(height: 1, color: AppConstants.textColor)),
+                              Expanded(
+                                child: Container(
+                                  height: 1,
+                                  color: AppConstants.accentColor,
+                                ),
+                              ),
                             ],
                           ),
                           SizedBox(height: spacing * 0.67),
@@ -195,13 +222,23 @@ class _DashboardPageState extends State<DashboardPage> {
                               padding: EdgeInsets.all(padding),
                               decoration: BoxDecoration(
                                 color: AppConstants.backgroundColor,
-                                borderRadius: BorderRadius.circular(padding * 0.625),
+                                borderRadius: BorderRadius.circular(
+                                  padding * 0.625,
+                                ),
                               ),
-                              child: Scrollbar(
-                                controller: _scrollController,
-                                thumbVisibility: true,
-                                radius: Radius.circular(padding * 0.5),
-                                child: ListView.builder(
+                              child: Theme(
+                                data: Theme.of(context).copyWith(
+                                  scrollbarTheme: ScrollbarThemeData(
+                                    thumbColor: WidgetStateProperty.all(
+                                      AppConstants.primaryColor,
+                                    ),
+                                  ),
+                                ),
+                                child: Scrollbar(
+                                  controller: _scrollController,
+                                  thumbVisibility: true,
+                                  radius: Radius.circular(padding * 0.5),
+                                  child: ListView.builder(
                                   controller: _scrollController,
                                   itemCount: events.length,
                                   itemBuilder: (context, index) {
@@ -218,6 +255,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                 ),
                               ),
                             ),
+                          ),
                           ),
                         ],
                       ),

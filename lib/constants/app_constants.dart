@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 class AppConstants {
-  static const Color primaryColor = Color(0xFFF5C15C);
-  static const Color secondaryColor = Color(0xFFFFCD71);
-  static const Color accentColor = Color(0xFFFFE3AE);
-  static const Color backgroundColor = Color(0xFFEFEFEF);
+  static const Color primaryColor = Color(0xFF701B2C);
+  static const Color secondaryColor = Color(0xFFE1A460);
+  static const Color accentColor = Color(0xFFE3CAB1);
+  static const Color backgroundColor = Color(0xFFEDEAEB);
   static const Color textColor = Color(0xFF191919);
 
   static const String fontPrimary = 'UNGurulugomi';
