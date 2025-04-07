@@ -36,7 +36,7 @@ A Flutter-based mobile app to celebrate and track **Sinhala & Tamil New Year (Al
 
 | Event | Event |
 |-------|-------|
-| ![Event1](./Screenshot/Event1.jpg) | ![Event2](./Screenshot/event2.jpg) |
+| ![Event1](./Screenshot/event1.jpg) | ![Event2](./Screenshot/event2.jpg) |
 
 
 ---
